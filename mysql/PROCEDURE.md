@@ -106,11 +106,24 @@ SELECT @pricelow, @pricehigh, @priceaverage;
 #### 建立智能储存过程
 - 注释：`-- `开始
 - `DECLARE`关键字声明局部变量，要求指定变量名和数据类型，其后可跟`DEFAULT`来指定默认值。
+
+- `DECLARE`语句的发布存在特定次序，否则将会产生错误信息
+    - 局部变量必须在任意游标和句柄之前定义
+    - 句柄必须在游标之后定义。
+
 - `COMMENT`关键字值不是不必需，它在`SHOW PROCEDURE STATUS`结果中显示。
+
 - 逻辑控制语句：
     - `IF ... THEN ... END IF`
     - `IF ... THEN ... ELSEIF ... THEN ... END IF`
     - `IF ... THEN ... ELSE ... ENDIF`
+
+- 循环： `REPEAT ... UNTIL done END REPEAT;`循环执行直到done为真。
+
+- 循环条件： `DECLARE CONTINUE HANDLER FRO SQLSTATE '02000' SET done=1;` 语句在结束时设置done为真。
+    - `CONTINUE HANDLER` 是在条件出现时被执行的代码，`SQLSTATE '02000`出现时，`SET done=`。
+    - `SQLSTATE '020000`是一个未找到条件，当`REPEAT`由于没有更多的供循环而不能继续时，出现这个条件。
+    
 
 储存过程示例：
 ```mysql
